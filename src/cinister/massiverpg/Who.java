@@ -13,6 +13,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nijiko.permissions.PermissionHandler;
+
 
 public class Who extends JavaPlugin {
 	Logger log = Logger.getLogger("Minecraft");
@@ -23,7 +25,8 @@ public class Who extends JavaPlugin {
 	public final PermissionsHook permissionsHook = new PermissionsHook(this);
 	public final VanishHook vanishHook = new VanishHook(this);
 	public final GeneralsHook generalsHook = new GeneralsHook(this);
-
+	public PermissionHandler permissionsHandler = null;
+	
 	public void log(String message) {	        this.log.info("[Who] " + message);  }
 	public boolean IsPlrHid(Player player){		return vanishHook.isHidden(player);	}
 	public boolean IsPlrHid(String str){		return vanishHook.isHidden(str);	}
@@ -35,11 +38,6 @@ public class Who extends JavaPlugin {
 		return str.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
 	}
 	public void onEnable(){ 
-    	log.info("****************************************************");	
-    	log.info("****************************************************");	
-    	log.info("****************************************************");	
-    	log.info("****************************************************");	
-    	log.info("****************************************************");	
         this.vanishHook.onPluginEnable();
         this.generalsHook.onPluginEnable();
         this.permissionsHook.onPluginEnable();
@@ -63,12 +61,19 @@ public class Who extends JavaPlugin {
 		if(cmd.getName().equalsIgnoreCase("who")){ // If the player typed /who then do the following...
    			boolean showall = true;
    			int playerHidden = 0;
-   			Player plr = (Player) sender;
    			Player OnlinePlayers[] = getServer().getOnlinePlayers();
-plr.sendMessage("OnlinePlayers: " + OnlinePlayers.length);
    			int MaxPlayers = getServer().getMaxPlayers();
-plr.sendMessage("MaxPlayers: " + MaxPlayers);
 
+   			//add in check for Op rebuild command
+   			if(args.length > 0 && args[0].equalsIgnoreCase("rebuild")){
+   				if( ((Player) sender).isOp()){
+   					((Player) sender).sendMessage("Rebuilding Groups Info.");
+   					permissionsHook.reload((Player) sender);
+   					((Player) sender).sendMessage(ChatColor.GREEN + "/who rebuild - Done.");
+   				}
+   				
+   			}
+   			
    			if(checkforVanish){  //found VanishNoPacket, only list "visible" people
    				for (Player p : OnlinePlayers) {
    					if(IsPlrHid(p)){ 
@@ -78,15 +83,11 @@ plr.sendMessage("MaxPlayers: " + MaxPlayers);
    				if(playerHidden > 0 && !vanishHook.canSeeAll((Player) sender)){ showall = false; }
    			}
 
-plr.sendMessage("StartMaxPlayers: " + MaxPlayers);
    			//Output Players
 			Map<String, List<Player>> sort = new HashMap<String, List<Player>>();
 			for (Player p : OnlinePlayers) {
-				if (IsPlrHid(p) && !showall) {
-					continue;
-				}
+				if (IsPlrHid(p) && !showall) {	continue;	}
 				String group = permissionsHook.getGroup(p);
-plr.sendMessage("Group: " + group);
 				List<Player> list = sort.get(group);
 				if (list == null) {
 					list = new ArrayList<Player>();
@@ -94,7 +95,6 @@ plr.sendMessage("Group: " + group);
 				}
 				list.add(p);
 			}
-plr.sendMessage("End of Group srch.");
 
 			String[] groups = sort.keySet().toArray(new String[0]);
 			Arrays.sort(groups, String.CASE_INSENSITIVE_ORDER);
@@ -102,7 +102,6 @@ plr.sendMessage("End of Group srch.");
 			for (String group : groups) {
 				StringBuilder groupString = new StringBuilder();
 				groupColor = permissionsHook.getGroupColor(group);
-plr.sendMessage("Color: " + groupColor + "test");
 				groupString.append(groupColor + group +  ChatColor.WHITE + ": ");
 				List<Player> users = sort.get(group);
 //				Collections.sort(users);
@@ -136,7 +135,7 @@ plr.sendMessage("Color: " + groupColor + "test");
 			online.append(ChatColor.BLUE + " out of a maximum " + ChatColor.RED + MaxPlayers + ChatColor.BLUE + " players online.");
 			sender.sendMessage(online.toString());
 
-			
+			permissionsHook.debug_clr();			
 			return true;
 		} //If this has happened the function will break and return true. if this hasn't happened the a value of false will be returned.
 		return false; 
