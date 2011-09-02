@@ -1,0 +1,10 @@
+name: Who
+main: cinister.massiverpg.Who
+version: 0.0.4a
+author: Cinister
+
+commands:
+   who:
+      description: Displays players online sorted & printed in groups
+      usage:
+           /<command>
