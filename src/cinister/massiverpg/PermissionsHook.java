@@ -39,12 +39,12 @@ public class PermissionsHook {
 
 //    private String world = "MIAP";
 
-    public PermissionsHook(Who plugin) {		this.plugin = plugin;	enabled = false;		}
-	public void onPluginDisable() {				enabled = false;	}
+    public PermissionsHook(Who plugin) {        this.plugin = plugin;	enabled = false;   }
+	public void onPluginDisable() {             enabled = false;    }
     public void onPluginEnable() {
     	initVars();
     	grabPermissionsPlugin();
-    	if(enabled){							BuildGroups();    	}
+    	if(enabled){                            BuildGroups();      }
     }
 
     public void debug_clr(){
@@ -98,15 +98,15 @@ public class PermissionsHook {
 */
     
     public String getGroup(Player player) {
-    	if(!enabled){ return ""; }
+        if(!enabled){ return ""; }
     	
-    	User user = permHelper.getUserObject(player.getWorld().getName(), player.getName());
+        User user = permHelper.getUserObject(player.getWorld().getName(), player.getName());
         LinkedHashSet<Entry> group = user.getParents();
         String str = "";
         for (Entry g : group) {
-        	str = g.getName();
+            str = g.getName();
         }
-    	return str;
+        return str;
     }
 
     private void BuildGroups(){

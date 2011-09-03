@@ -10,10 +10,10 @@ public class GeneralsHook {
     private General generalP;
     public boolean enabled;
 
-    public GeneralsHook(Who plugin) {		this.plugin = plugin;	enabled = false;    }
-	public void onPluginDisable() {			enabled = false;    }
-    public void onPluginEnable() {			enabled = true;    	grabGeneralsPlugin();    }
-    public boolean isAway(Player who) {		return generalP.isAway(who);	}
+    public GeneralsHook(Who plugin) {       this.plugin = plugin;   enabled = false;    }
+    public void onPluginDisable() {         enabled = false;                            }
+    public void onPluginEnable() {          enabled = true;      grabGeneralsPlugin();  }
+    public boolean isAway(Player who) {     return generalP.isAway(who);                }
 
     private void grabGeneralsPlugin() {
         final Plugin grab = plugin.getServer().getPluginManager().getPlugin("General");

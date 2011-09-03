@@ -27,9 +27,9 @@ public class Who extends JavaPlugin {
 	public final GeneralsHook generalsHook = new GeneralsHook(this);
 	public PermissionHandler permissionsHandler = null;
 	
-	public void log(String message) {	        this.log.info("[Who] " + message);  }
-	public boolean IsPlrHid(Player player){		return vanishHook.isHidden(player);	}
-	public boolean IsPlrHid(String str){		return vanishHook.isHidden(str);	}
+	public void log(String message) {           this.log.info("[Who] " + message);  }
+	public boolean IsPlrHid(Player player){     return vanishHook.isHidden(player); }
+	public boolean IsPlrHid(String str){        return vanishHook.isHidden(str);    }
 	public boolean checkforVanish = vanishHook.enabled;
 	public boolean checkforAFK = generalsHook.enabled;
 
@@ -38,11 +38,11 @@ public class Who extends JavaPlugin {
 		return str.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
 	}
 	public void onEnable(){ 
-        this.vanishHook.onPluginEnable();
-        this.generalsHook.onPluginEnable();
-        this.permissionsHook.onPluginEnable();
+		this.vanishHook.onPluginEnable();
+		this.generalsHook.onPluginEnable();
+		this.permissionsHook.onPluginEnable();
         
-        if(permissionsHook != null){
+		if(permissionsHook != null){
         	enabled = true;
         	log.info("Who command Enabled.");	
         } else {
@@ -51,8 +51,8 @@ public class Who extends JavaPlugin {
 	}
 
 	public void onDisable(){ 
-        this.vanishHook.onPluginDisable();
-        this.generalsHook.onPluginDisable();
+		this.vanishHook.onPluginDisable();
+		this.generalsHook.onPluginDisable();
 		log.info("Who command Disabled.");
 	}
 
